@@ -1,0 +1,5 @@
+Spotify:
+  ClientID: YOURCLIENTID
+  ClientSecret: YOURCLIENTSECRET
+SessionSecret: something-very-secret
+DomainName: localhost:8000
