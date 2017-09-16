@@ -6,7 +6,7 @@ import (
 
 	"golang.org/x/oauth2"
 
-	"github.com/Preovaleo/SleepSpotify/config"
+	"github.com/SleepSpotify/SleepSpotify/config"
 	"github.com/zmb3/spotify"
 )
 

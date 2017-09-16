@@ -1,7 +1,7 @@
 package session
 
 import (
-	"github.com/Preovaleo/SleepSpotify/config"
+	"github.com/SleepSpotify/SleepSpotify/config"
 	"github.com/gorilla/sessions"
 )
 

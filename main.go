@@ -4,10 +4,10 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/Preovaleo/SleepSpotify/config"
-	"github.com/Preovaleo/SleepSpotify/controler"
-	"github.com/Preovaleo/SleepSpotify/session"
-	"github.com/Preovaleo/SleepSpotify/spotify"
+	"github.com/SleepSpotify/SleepSpotify/config"
+	"github.com/SleepSpotify/SleepSpotify/controler"
+	"github.com/SleepSpotify/SleepSpotify/session"
+	"github.com/SleepSpotify/SleepSpotify/spotify"
 	restful "github.com/emicklei/go-restful"
 )
 

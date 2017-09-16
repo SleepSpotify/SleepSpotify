@@ -4,8 +4,8 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/Preovaleo/SleepSpotify/session"
-	"github.com/Preovaleo/SleepSpotify/spotify"
+	"github.com/SleepSpotify/SleepSpotify/session"
+	"github.com/SleepSpotify/SleepSpotify/spotify"
 	restful "github.com/emicklei/go-restful"
 )
 
