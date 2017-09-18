@@ -14,6 +14,13 @@ type Config struct {
 	} `yaml:"Spotify"`
 	SessionSecret string `yaml:"SessionSecret"`
 	DomainName    string `yaml:"DomainName"`
+	DB            struct {
+		Host     string `yaml:"Host"`
+		Port     int    `yaml:"Port"`
+		Name     string `yaml:"Name"`
+		Username string `yaml:"Username"`
+		Password string `yaml:"Password"`
+	} `yaml:"DB"`
 }
 
 // ReadConfig Function to read the config from the yaml config file

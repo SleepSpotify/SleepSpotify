@@ -6,6 +6,7 @@ import (
 
 	"github.com/SleepSpotify/SleepSpotify/config"
 	"github.com/SleepSpotify/SleepSpotify/controler"
+	"github.com/SleepSpotify/SleepSpotify/db"
 	"github.com/SleepSpotify/SleepSpotify/session"
 	"github.com/SleepSpotify/SleepSpotify/spotify"
 	restful "github.com/emicklei/go-restful"
@@ -21,14 +22,21 @@ func main() {
 
 	session.InitStore(config)
 	spotify.InitAuth(config)
+	db.InitDB(config)
 
 	ws := new(restful.WebService)
-	ws.Path("/spotify").Produces(restful.MIME_JSON, restful.MIME_XML)
+	ws.Path("/spotify").Produces(restful.MIME_XML, restful.MIME_JSON)
 	ws.Route(ws.PUT("/pause").To(controler.PUTPauseSpotifyControler))
+	ws.Route(ws.GET("/sleep").To(controler.GETSleep))
+	ws.Route(ws.POST("/sleep").To(controler.POSTSleep))
+	ws.Route(ws.PUT("/sleep").To(controler.PUTSleep))
+	ws.Route(ws.DELETE("/sleep").To(controler.DELETESleep))
 	restful.Add(ws)
 
 	http.HandleFunc("/callback", controler.CallbackSpotifyControler)
 	http.HandleFunc("/login", controler.LoginSpotifyControler)
+
+	go initCron()
 
 	err := http.ListenAndServe(config.DomainName, nil)
 	if err != nil {

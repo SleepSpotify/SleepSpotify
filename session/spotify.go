@@ -2,6 +2,7 @@ package session
 
 import (
 	"encoding/json"
+	"errors"
 	"log"
 	"net/http"
 
@@ -53,4 +54,24 @@ func SetToken(session *sessions.Session, token *oauth2.Token) {
 		log.Println("TOKEN MARSHAL error : ", err)
 	}
 	session.Values["SpotifyToken"] = ret
+}
+
+// GetIDPause function to retrieve the ID pause from the session
+func GetIDPause(session *sessions.Session) (int64, error) {
+	i, ok := session.Values["SpotifyID"]
+	if !ok {
+		return 0, nil
+	}
+
+	iInt, ok := i.(int64)
+	if !ok {
+		return 0, errors.New("Bad shapped ID")
+	}
+
+	return iInt, nil
+}
+
+// SetIDPause function to set the ID pause in the session
+func SetIDPause(session *sessions.Session, i int64) {
+	session.Values["SpotifyID"] = i
 }

@@ -15,5 +15,5 @@ func jsonErrMessage(s string) string {
 }
 
 type jsonRep struct {
-	Message string
+	Data string `json:"data"`
 }

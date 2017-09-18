@@ -59,6 +59,12 @@ func LoginSpotifyControler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	tok := session.GetToken(ses)
+	if tok != nil {
+		http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
+		return
+	}
+
 	state := session.SetSRandomState(ses)
 
 	errSave := ses.Save(r, w)

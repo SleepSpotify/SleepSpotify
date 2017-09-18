@@ -3,3 +3,9 @@ Spotify:
   ClientSecret: YOURCLIENTSECRET
 SessionSecret: something-very-secret
 DomainName: localhost:8000
+DB:
+  Host: localhost
+  Port: 3306
+  Name: sleepspotify_db
+  Username: sleepspotify_u
+  Password: sleepspotify_pw
