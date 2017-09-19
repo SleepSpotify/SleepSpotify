@@ -87,22 +87,20 @@ var mutexInsert = &sync.Mutex{}
 // Insert function to insert a sleep obejct in the database
 func (s *Sleep) Insert() error {
 	mutexInsert.Lock()
+	defer mutexInsert.Unlock()
 	res, errQry := DB.Exec("INSERT INTO pause(token,uts) VALUES (?, ?)", s.token, s.Uts)
 	if errQry != nil {
-		mutexInsert.Unlock()
 		return errQry
 	}
 	i, errID := res.LastInsertId()
 	if errID != nil {
-		mutexInsert.Unlock()
 		return errID
 	}
 	s.ID = i
-	mutexInsert.Unlock()
 	return nil
 }
 
-// Update functionto Update the object
+// Update function to Update the object
 // call insert if the object hasn't an ID
 func (s *Sleep) Update() error {
 	if s.ID == 0 {
