@@ -24,6 +24,11 @@ func main() {
 	spotify.InitAuth(config)
 	db.InitDB(config)
 
+	errDB := db.DB.Ping()
+	if errDB != nil {
+		log.Fatal("DB FAILURE : ", errDB)
+	}
+
 	ws := new(restful.WebService)
 	ws.Path("/spotify").Produces(restful.MIME_XML, restful.MIME_JSON)
 	ws.Route(ws.PUT("/pause").To(controler.PUTPauseSpotifyControler))
