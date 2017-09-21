@@ -1,6 +1,10 @@
 package controler
 
-import "encoding/json"
+import (
+	"encoding/json"
+
+	"github.com/SleepSpotify/SleepSpotify/db"
+)
 
 func makeJSONResponse(v interface{}) string {
 	b, err := json.Marshal(v)
@@ -16,4 +20,9 @@ func jsonErrMessage(s string) string {
 
 type jsonRep struct {
 	Data string `json:"data"`
+}
+
+type jsonSleepNbr struct {
+	NbrItem int        `json:"NbrItem"`
+	Data    []db.Sleep `json:"Data"`
 }

@@ -1,9 +1,11 @@
 package controler
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 
+	"github.com/SleepSpotify/SleepSpotify/config"
 	"github.com/SleepSpotify/SleepSpotify/session"
 	"github.com/SleepSpotify/SleepSpotify/spotify"
 )
@@ -20,7 +22,7 @@ func CallbackSpotifyControler(w http.ResponseWriter, r *http.Request) {
 
 	checkTok := session.GetToken(ses)
 	if checkTok != nil {
-		http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
+		http.Redirect(w, r, fmt.Sprintf("%s/timer", config.GetConfig().Angular), http.StatusTemporaryRedirect)
 		return
 	}
 
@@ -47,7 +49,7 @@ func CallbackSpotifyControler(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/login", http.StatusTemporaryRedirect)
 		return
 	}
-	http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
+	http.Redirect(w, r, fmt.Sprintf("%s/timer", config.GetConfig().Angular), http.StatusTemporaryRedirect)
 }
 
 // LoginSpotifyControler controler to save a state to the session and to redirect to the spotify website
@@ -61,7 +63,7 @@ func LoginSpotifyControler(w http.ResponseWriter, r *http.Request) {
 
 	tok := session.GetToken(ses)
 	if tok != nil {
-		http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
+		http.Redirect(w, r, fmt.Sprintf("%s/timer", config.GetConfig().Angular), http.StatusTemporaryRedirect)
 		return
 	}
 

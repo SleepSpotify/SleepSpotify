@@ -10,14 +10,15 @@ import (
 
 // Sleep Object that represent a row in the database
 type Sleep struct {
-	ID    int64 `json:"-"`
-	Uts   int64 `json:"uts"`
-	token string
+	ID      int64 `json:"ID"`
+	Uts     int64 `json:"uts"`
+	token   string
+	refresh string
 }
 
 // NewSleep Constructor for the Sleep Object
 func NewSleep(ID int64, tok *oauth2.Token, Uts int64) (Sleep, error) {
-	s := Sleep{ID, Uts, ""}
+	s := Sleep{ID, Uts, "", tok.RefreshToken}
 	err := s.SetToken(tok)
 	if err != nil {
 		return Sleep{}, err
@@ -27,7 +28,6 @@ func NewSleep(ID int64, tok *oauth2.Token, Uts int64) (Sleep, error) {
 
 // GetToken function to get a token from a object sleep
 func (s *Sleep) GetToken() (*oauth2.Token, error) {
-
 	var tok *oauth2.Token
 	err := json.Unmarshal([]byte(s.token), &tok)
 	return tok, err
@@ -52,6 +52,26 @@ func GetFromID(id int64) (Sleep, error) {
 
 	if !rows.Next() {
 		return Sleep{}, errors.New("Not Found")
+	}
+
+	var ret Sleep
+	errScan := rows.Scan(&ret.ID, &ret.token, &ret.Uts)
+	if errScan != nil {
+		return Sleep{}, errScan
+	}
+
+	return ret, nil
+}
+
+// GetFromRefreshToken function to get the sleep timer from the refresh token
+func GetFromRefreshToken(refresh string) (Sleep, error) {
+	rows, errSel := DB.Query("SELECT * FROM pause WHERE refresh=?", refresh)
+	if errSel != nil {
+		return Sleep{}, errSel
+	}
+
+	if !rows.Next() {
+		return Sleep{}, nil
 	}
 
 	var ret Sleep
@@ -88,7 +108,7 @@ var mutexInsert = &sync.Mutex{}
 func (s *Sleep) Insert() error {
 	mutexInsert.Lock()
 	defer mutexInsert.Unlock()
-	res, errQry := DB.Exec("INSERT INTO pause(token,uts) VALUES (?, ?)", s.token, s.Uts)
+	res, errQry := DB.Exec("INSERT INTO pause(token, uts, refresh) VALUES (?, ?, ?)", s.token, s.Uts, s.refresh)
 	if errQry != nil {
 		return errQry
 	}
@@ -106,7 +126,7 @@ func (s *Sleep) Update() error {
 	if s.ID == 0 {
 		return s.Insert()
 	}
-	_, errQry := DB.Exec("UPDATE pause SET token=?, uts=? WHERE ID=?;", s.token, s.Uts, s.ID)
+	_, errQry := DB.Exec("UPDATE pause SET token=?, uts=?, refresh=? WHERE ID=?;", s.token, s.Uts, s.ID, s.refresh)
 	return errQry
 }
 

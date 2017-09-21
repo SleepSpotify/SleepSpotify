@@ -28,12 +28,12 @@ func GETSleep(req *restful.Request, resp *restful.Response) {
 
 	id, errID := session.GetIDPause(ses)
 	if errID != nil {
-		resp.WriteHeaderAndEntity(http.StatusInternalServerError, jsonRep{errID.Error()})
+		resp.WriteHeaderAndEntity(http.StatusInternalServerError, jsonRep{"Server Error"})
 		return
 	}
 
 	if id == 0 {
-		resp.WriteEntity(jsonRep{})
+		resp.WriteEntity(jsonSleepNbr{0, nil})
 		return
 	}
 
@@ -44,7 +44,8 @@ func GETSleep(req *restful.Request, resp *restful.Response) {
 		return
 	}
 
-	resp.WriteEntity(pause)
+	ret := []db.Sleep{pause}
+	resp.WriteEntity(jsonSleepNbr{1, ret})
 }
 
 // POSTSleep controler to set a sleep uts

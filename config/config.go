@@ -2,6 +2,7 @@ package config
 
 import (
 	"io/ioutil"
+	"log"
 
 	yaml "gopkg.in/yaml.v2"
 )
@@ -21,6 +22,17 @@ type Config struct {
 		Username string `yaml:"Username"`
 		Password string `yaml:"Password"`
 	} `yaml:"DB"`
+	Angular string `yaml:"Angular"`
+}
+
+var configGlob Config
+
+// GetConfig Function to get the config if the config file has allready been read
+func GetConfig() Config {
+	if (configGlob == Config{}) {
+		log.Fatal("CONFIG NOT INITIALISED")
+	}
+	return configGlob
 }
 
 // ReadConfig Function to read the config from the yaml config file
@@ -38,5 +50,6 @@ func ReadConfig() (Config, error) {
 		return config, errMarsh
 	}
 
+	configGlob = config
 	return config, nil
 }
