@@ -15,8 +15,8 @@ func CallbackSpotifyControler(w http.ResponseWriter, r *http.Request) {
 
 	ses, errSes := session.GetSessionSpotify(r)
 	if errSes != nil {
-		http.Error(w, jsonErrMessage("Server Error"), http.StatusInternalServerError)
-		log.Println("Session Failure : ", errSes)
+		log.Println("SESSION FAILURE : ", errSes)
+		http.Error(w, "Server Error", http.StatusInternalServerError)
 		return
 	}
 
@@ -34,14 +34,15 @@ func CallbackSpotifyControler(w http.ResponseWriter, r *http.Request) {
 
 	tok, errTkn := spotify.GetToken(state, r)
 	if errTkn != nil {
-		http.Error(w, jsonErrMessage(errTkn.Error()), http.StatusBadRequest)
+		http.Error(w, errTkn.Error(), http.StatusBadRequest)
 		return
 	}
 
 	session.SetToken(ses, tok)
 	errSave := ses.Save(r, w)
 	if errSave != nil {
-		http.Error(w, jsonErrMessage(errSave.Error()), http.StatusInternalServerError)
+		log.Println("SESSION FAILURE : ", errSave)
+		http.Error(w, "Server Error", http.StatusInternalServerError)
 		return
 	}
 
@@ -56,8 +57,8 @@ func CallbackSpotifyControler(w http.ResponseWriter, r *http.Request) {
 func LoginSpotifyControler(w http.ResponseWriter, r *http.Request) {
 	ses, errSes := session.GetSessionSpotify(r)
 	if errSes != nil {
-		http.Error(w, jsonErrMessage("Server Error"), http.StatusInternalServerError)
-		log.Println("Session Failure : ", errSes)
+		log.Println("SESSION FAILURE : ", errSes)
+		http.Error(w, "Server Error", http.StatusInternalServerError)
 		return
 	}
 
@@ -71,7 +72,8 @@ func LoginSpotifyControler(w http.ResponseWriter, r *http.Request) {
 
 	errSave := ses.Save(r, w)
 	if errSave != nil {
-		http.Error(w, jsonErrMessage(errSave.Error()), http.StatusInternalServerError)
+		log.Println("SESSION FAILURE : ", errSave)
+		http.Error(w, "Server Error", http.StatusInternalServerError)
 		return
 	}
 

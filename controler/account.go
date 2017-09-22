@@ -14,13 +14,13 @@ func IsConnected(req *restful.Request, resp *restful.Response) {
 	ses, err := session.GetSessionSpotify(req.Request)
 	if err != nil {
 		log.Println("Session Failure : ", err)
-		resp.WriteHeaderAndEntity(http.StatusUnauthorized, jsonRep{"Server Error"})
+		resp.WriteHeaderAndEntity(http.StatusUnauthorized, JSONError{"Server Error"})
 		return
 	}
 
 	tok := session.GetToken(ses)
 	if tok == nil {
-		resp.WriteEntity(jsonConnected{false, ""})
+		resp.WriteEntity(JSONConnected{false, ""})
 		return
 	}
 
@@ -28,14 +28,9 @@ func IsConnected(req *restful.Request, resp *restful.Response) {
 	User, errSpot := client.CurrentUser()
 	if errSpot != nil {
 		log.Println("Spotify Failure : ", errSpot)
-		resp.WriteHeaderAndEntity(http.StatusUnauthorized, jsonRep{"Server Error"})
+		resp.WriteHeaderAndEntity(http.StatusUnauthorized, JSONError{"Server Error"})
 		return
 	}
 
-	resp.WriteEntity(jsonConnected{true, User.DisplayName})
-}
-
-type jsonConnected struct {
-	IsConnected bool
-	UserName    string
+	resp.WriteEntity(JSONConnected{true, User.DisplayName})
 }
