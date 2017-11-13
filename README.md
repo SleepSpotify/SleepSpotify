@@ -1,4 +1,4 @@
-# SleepSpotify
+# SleepSpotify v0.1
 This project allows you to pause spotify at the end of a timer or after a certain timer
 
 ## What you need
