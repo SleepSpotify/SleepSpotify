@@ -29,14 +29,28 @@ func main() {
 		log.Fatal("DB FAILURE : ", errDB)
 	}
 
-	ws := new(restful.WebService)
-	ws.Path("/spotify").Produces(restful.MIME_XML, restful.MIME_JSON)
-	ws.Route(ws.PUT("/pause").To(controler.PUTPauseSpotifyControler))
-	ws.Route(ws.GET("/sleep").To(controler.GETSleep))
-	ws.Route(ws.POST("/sleep").To(controler.POSTSleep))
-	ws.Route(ws.PUT("/sleep").To(controler.PUTSleep))
-	ws.Route(ws.DELETE("/sleep").To(controler.DELETESleep))
-	restful.Add(ws)
+	wsSpotify := new(restful.WebService)
+	wsSpotify.Path("/spotify").Produces(restful.MIME_XML, restful.MIME_JSON)
+	wsSpotify.Route(wsSpotify.PUT("/pause").To(controler.PUTPauseSpotifyControler))
+	wsSpotify.Route(wsSpotify.GET("/sleep").To(controler.GETSleep))
+	wsSpotify.Route(wsSpotify.POST("/sleep").To(controler.POSTSleep))
+	wsSpotify.Route(wsSpotify.PUT("/sleep").To(controler.PUTSleep))
+	wsSpotify.Route(wsSpotify.DELETE("/sleep").To(controler.DELETESleep))
+	restful.Add(wsSpotify)
+
+	wsAccount := new(restful.WebService)
+	wsAccount.Path("/account").Produces(restful.MIME_XML, restful.MIME_JSON)
+	wsAccount.Route(wsAccount.GET("/isConnected").To(controler.IsConnected))
+	restful.Add(wsAccount)
+
+	cors := restful.CrossOriginResourceSharing{
+		AllowedHeaders: []string{"Content-Type", "Accept"},
+		AllowedDomains: []string{config.Angular},
+		CookiesAllowed: true,
+		Container:      restful.DefaultContainer,
+	}
+	restful.DefaultContainer.Filter(cors.Filter)
+	restful.DefaultContainer.Filter(restful.DefaultContainer.OPTIONSFilter)
 
 	http.HandleFunc("/callback", controler.CallbackSpotifyControler)
 	http.HandleFunc("/login", controler.LoginSpotifyControler)

@@ -1,19 +1,25 @@
 package controler
 
-import "encoding/json"
+import "github.com/SleepSpotify/SleepSpotify/db"
 
-func makeJSONResponse(v interface{}) string {
-	b, err := json.Marshal(v)
-	if err != nil {
-		return err.Error()
-	}
-	return string(b)
+// JSONSleepFound Object to return if a sleep is found
+type JSONSleepFound struct {
+	Found bool
+	Sleep *db.Sleep
 }
 
-func jsonErrMessage(s string) string {
-	return makeJSONResponse(jsonRep{s})
+// JSONConnected Object to return is the user is connected
+type JSONConnected struct {
+	IsConnected bool
+	Username    string
 }
 
-type jsonRep struct {
-	Data string `json:"data"`
+// JSONError Object to return an error
+type JSONError struct {
+	Message string
+}
+
+// JSONActionDone Object to return an action done
+type JSONActionDone struct {
+	Message string
 }
