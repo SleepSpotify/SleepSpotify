@@ -1,4 +1,4 @@
-# SleepSpotify v0.1.1
+# SleepSpotify v0.1.2
 This project allows you to pause spotify at a specific UTS
 
 ## What do you need
