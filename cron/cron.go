@@ -1,4 +1,4 @@
-package main
+package cron
 
 import (
 	"log"
@@ -10,12 +10,14 @@ import (
 	"github.com/zmb3/spotify"
 )
 
-func initCron() {
+// InitCron the function to call to enable the cron every second
+func InitCron() {
 	c := cron.New()
 	c.AddFunc("* * * * * *", cronSpotify)
-	c.Run()
+	go c.Run()
 }
 
+// the function that will be called every second
 func cronSpotify() {
 	pauses, errDb := db.GetFromUts(time.Now().Unix())
 	if errDb != nil {
@@ -30,13 +32,15 @@ func cronSpotify() {
 		}
 
 		client := sleepspotify.GetClient(tok)
-		go func(client spotify.Client, pause db.Sleep) {
-			err := client.Pause()
-			if err != nil {
-				log.Println("SPOTIFY FAILURE : ", err)
-			} else {
-				pause.Delete()
-			}
-		}(client, pause)
+		go pauseSpotifyRoutine(client, pause)
+	}
+}
+
+func pauseSpotifyRoutine(client spotify.Client, pause db.Sleep) {
+	err := client.Pause()
+	if err != nil {
+		log.Println("SPOTIFY FAILURE : ", err)
+	} else {
+		pause.Delete()
 	}
 }

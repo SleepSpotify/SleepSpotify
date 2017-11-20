@@ -6,6 +6,7 @@ import (
 
 	"github.com/SleepSpotify/SleepSpotify/config"
 	"github.com/SleepSpotify/SleepSpotify/controler"
+	"github.com/SleepSpotify/SleepSpotify/cron"
 	"github.com/SleepSpotify/SleepSpotify/db"
 	"github.com/SleepSpotify/SleepSpotify/session"
 	"github.com/SleepSpotify/SleepSpotify/spotify"
@@ -55,7 +56,7 @@ func main() {
 	http.HandleFunc("/callback", controler.CallbackSpotifyControler)
 	http.HandleFunc("/login", controler.LoginSpotifyControler)
 
-	go initCron()
+	cron.InitCron()
 
 	err := http.ListenAndServe(config.DomainName, nil)
 	if err != nil {
